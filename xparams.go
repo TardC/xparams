@@ -33,6 +33,7 @@ var (
 	DefaultQueryFormExtractor Extractor
 	DefaultCookieExtractor    Extractor
 	DefaultJSONExtractor      Extractor
+	DefaultXMLExtractor       Extractor
 )
 
 func init() {
@@ -45,6 +46,9 @@ func init() {
 		jsonStrRegexpStr     = `"([^{\[,]+)":"([^{\[,]+)"`
 		jsonNumRegexpStr     = `"([^{\[,]+)":(-?[\d.]+)`
 		jsonKeywordRegexpStr = `"([^{\[,]+)":(true|false|null)`
+
+		xmlAttrRegexpStr  = `(?U)(\w+)="(.*)"`
+		xmlValueRegexpStr = `(?U)<(\w+?) ?\S*>(.*)</`
 	)
 
 	queryFormRegexp := regexp.MustCompile(queryFormRegexpStr)
@@ -53,10 +57,13 @@ func init() {
 	jsonStrRegexp := regexp.MustCompile(jsonStrRegexpStr)
 	jsonNumRegexp := regexp.MustCompile(jsonNumRegexpStr)
 	jsonKeywordRegexp := regexp.MustCompile(jsonKeywordRegexpStr)
+	xmlAttrRegexp := regexp.MustCompile(xmlAttrRegexpStr)
+	xmlValueRegexp := regexp.MustCompile(xmlValueRegexpStr)
 
 	DefaultQueryFormExtractor = Extractor{queryFormRegexp, queryFormRegexp2}
 	DefaultCookieExtractor = Extractor{cookieRegexp}
 	DefaultJSONExtractor = Extractor{jsonStrRegexp, jsonNumRegexp, jsonKeywordRegexp}
+	DefaultXMLExtractor = Extractor{xmlAttrRegexp, xmlValueRegexp}
 }
 
 const (
